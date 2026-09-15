@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Каталог книг — BookMarket</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav {
+            background: #34495e;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 15px;
+            font-weight: bold;
+        }
+
+        .search-block {
+            max-width: 1100px;
+            margin: 25px auto 0;
+            padding: 0 20px;
+        }
+
+        #searchInput {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px;
+            font-size: 17px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .catalog {
+            max-width: 1100px;
+            margin: 25px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .book-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .book-placeholder {
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            color: #666;
+            text-align: center;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 21px;
+        }
+
+        .author {
+            color: #555;
+        }
+
+        .price {
+            color: #16883a;
+            font-size: 22px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .description {
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .empty,
+        .error {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+            text-align: center;
+            background: white;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>📚 Каталог книг</h1>
+    <p>Книги пользователей BookMarket</p>
+</header>
+
+<nav>
+    <a href="/">Главная</a>
+    <a href="/catalog.html">Каталог</a>
+    <a href="/add-book.html">Продать книгу</a>
+    <a href="/exchange.html">Обмен</a>
+</nav>
+
+<div class="search-block">
+    <input
+        id="searchInput"
+        type="text"
+        placeholder="Поиск по названию или автору..."
+    >
+</div>
+
+<main id="catalog" class="catalog"></main>
+
+<script>
+    let allBooks = [];
+
+    async function loadBooks() {
+        const catalog = document.getElementById("catalog");
+
+        try {
+            const response = await fetch("/books");
+
+            if (!response.ok) {
+                throw new Error("Не удалось загрузить книги");
+            }
+
+            allBooks = await response.json();
+            renderBooks(allBooks);
+        } catch (error) {
+            catalog.innerHTML = `
+                <div class="error">
+                    Ошибка загрузки каталога: ${escapeHtml(error.message)}
+                </div>
+            `;
+        }
+    }
+
+    function renderBooks(books) {
+        const catalog = document.getElementById("catalog");
+
+        if (books.length === 0) {
+            catalog.innerHTML = `
+                <div class="empty">
+                    Книги не найдены.
+                </div>
+            `;
+            return;
+        }
+
+        catalog.innerHTML = books.map(book => `
+            <article class="card">
+                ${
+                    book.image
+                        ? `
+                            <img
+                                class="book-image"
+                                src="${escapeHtml(book.image)}"
+                                alt="${escapeHtml(book.title)}"
+                            >
+                        `
+                        : `
+                            <div class="book-placeholder">
+                                Нет фотографии
+                            </div>
+                        `
+                }
+
+                <h2>${escapeHtml(book.title)}</h2>
+                <p class="author">${escapeHtml(book.author)}</p>
+                <div class="price">${escapeHtml(book.price)} ₸</div>
+
+                <p class="description">
+                    ${escapeHtml(book.description || "Описание не указано")}
+                </p>
+            </article>
+        `).join("");
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    document.getElementById("searchInput").addEventListener("input", event => {
+        const query = event.target.value.trim().toLowerCase();
+
+        const filteredBooks = allBooks.filter(book => {
+            const title = String(book.title || "").toLowerCase();
+            const author = String(book.author || "").toLowerCase();
+
+            return title.includes(query) || author.includes(query);
+        });
+
+        renderBooks(filteredBooks);
+    });
+
+    loadBooks();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Регистрация — BookMarket</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .field {
+            margin-top: 12px;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 18px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #219150;
+        }
+
+        .error {
+            color: red;
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .show-password {
+            margin-top: 12px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .show-password input {
+            width: auto;
+        }
+
+        .rules {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .login-link {
+            margin-top: 18px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📚 Регистрация</h1>
+
+    <form
+        action="/register"
+        method="POST"
+        onsubmit="return validateForm()"
+    >
+        <div class="field">
+            <input
+                class="text-input"
+                type="text"
+                name="name"
+                placeholder="Ваше имя"
+                required
+            >
+        </div>
+
+        <div class="field">
+            <input
+                class="text-input"
+                type="text"
+                name="username"
+                placeholder="Имя пользователя"
+                minlength="3"
+                maxlength="20"
+                pattern="[A-Za-z0-9_]+"
+                title="Только латинские буквы, цифры и знак _"
+                required
+            >
+        </div>
+
+        <div class="field">
+            <input
+                class="text-input"
+                type="email"
+                name="email"
+                placeholder="Email"
+                required
+            >
+        </div>
+
+        <div class="field">
+            <input
+                class="text-input"
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Пароль"
+                minlength="6"
+                required
+            >
+        </div>
+
+        <div class="field">
+            <input
+                class="text-input"
+                id="passwordConfirm"
+                type="password"
+                name="passwordConfirm"
+                placeholder="Повторите пароль"
+                minlength="6"
+                required
+            >
+        </div>
+
+        <label class="show-password">
+            <input
+                type="checkbox"
+                onclick="togglePasswords()"
+            >
+            Показать пароль
+        </label>
+
+        <div class="rules">
+            Имя пользователя: 3–20 символов, только латинские буквы, цифры и знак _. Пароль: минимум 6 символов.
+        </div>
+
+        <div id="error" class="error"></div>
+
+        <button type="submit">
+            Зарегистрироваться
+        </button>
+    </form>
+
+    <div class="login-link">
+        Уже есть аккаунт?
+        <a href="/login.html">Войти</a>
+    </div>
+
+</div>
+
+<script>
+    function togglePasswords() {
+        const password =
+            document.getElementById("password");
+
+        const passwordConfirm =
+            document.getElementById("passwordConfirm");
+
+        const newType =
+            password.type === "password"
+                ? "text"
+                : "password";
+
+        password.type = newType;
+        passwordConfirm.type = newType;
+    }
+
+    function validateForm() {
+        const password =
+            document.getElementById("password").value;
+
+        const passwordConfirm =
+            document.getElementById("passwordConfirm").value;
+
+        const error =
+            document.getElementById("error");
+
+        error.textContent = "";
+
+        if (password.length < 6) {
+            error.textContent =
+                "Пароль должен содержать минимум 6 символов";
+
+            return false;
+        }
+
+        if (password !== passwordConfirm) {
+            error.textContent =
+                "Пароли не совпадают";
+
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+</body>
+</html>

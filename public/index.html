@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BookMarket</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav {
+            background: #34495e;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 15px;
+            font-weight: bold;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .search {
+            width: 60%;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 10px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>📚 BookMarket</h1>
+    <p>Продажа и обмен книг</p>
+</header>
+
+<nav>
+    <a href="/">Главная</a>
+    <a href="/catalog.html">Каталог</a>
+    <a href="/add-book.html">Продать книгу</a>
+    <a href="/exchange.html">Обмен</a>
+    <a href="#">Контакты</a>
+</nav>
+
+<main class="hero">
+    <h2>Добро пожаловать!</h2>
+
+    <p>Здесь можно покупать, продавать и обменивать книги.</p>
+
+    <input
+        class="search"
+        type="text"
+        placeholder="🔍 Поиск книги или автора..."
+    >
+
+    <div>
+        <a class="button" href="/catalog.html">Каталог книг</a>
+        <a class="button" href="/add-book.html">Продать книгу</a>
+        <a class="button" href="/exchange.html">Обменять книгу</a>
+    </div>
+</main>
+
+</body>
+</html>
